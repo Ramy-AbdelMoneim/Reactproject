@@ -23,7 +23,6 @@ export default function Modifypost({ posts, modifypost }) {
     const newform = { ...form, ...post };
     setform(newform);
   }, []);
-  // console.log(form);
   const formhandler = (e) => {
     const newform = { ...form, [e.target.name]: "" + e.target.value };
     setform(newform);
@@ -32,14 +31,11 @@ export default function Modifypost({ posts, modifypost }) {
   const navigate = useNavigate();
   const modifyhandler = async (e) => {
     e.preventDefault();
-    const newform = { ...form };
-    // console.log(newform);
     const res = await Modifydb(form._id);
     modifypost(res);
     const notify = () => toast("✔ Post has been Modified");
     notify();
     navigate("/");
-    // console.log(res);
   };
   //modify in db
   const Modifydb = async (id) => {

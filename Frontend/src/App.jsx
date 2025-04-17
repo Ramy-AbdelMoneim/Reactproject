@@ -33,7 +33,6 @@ export default function App() {
         setUser(data.username);
         setUserID(data.userId);
       }
-      getdata();
     };
     const getdata = async () => {
       const res = await axios.get("http://localhost:8080/");
@@ -41,7 +40,7 @@ export default function App() {
       setloading(false);
     };
     getuser();
-    // getdata();
+    getdata();
   }, []);
   //addpost
   const addpost = (post) => {

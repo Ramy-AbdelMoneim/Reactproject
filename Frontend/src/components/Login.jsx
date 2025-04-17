@@ -30,7 +30,6 @@ export default function Login({ userhandler, userIdhandler }) {
         userIdhandler(data[2]);
         navigate("/");
       } else {
-        console.log("wrong");
         setwrongmail(true);
       }
     }
