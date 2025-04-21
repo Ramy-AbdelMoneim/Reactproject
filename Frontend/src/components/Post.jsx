@@ -14,10 +14,16 @@ export default function Post({
 }) {
   //delete from db and front end
   const deletepostDB = async (id) => {
-    const { data } = await axios.post("http://localhost:8080/delete/" + id);
-    deletepost(id);
-    const notify = () => toast("✘ Post has been deleted");
-    notify();
+    try {
+      const { data } = await axios.post("http://localhost:8080/delete/" + id);
+      deletepost(id);
+      const notify = () => toast("✘ Post has been deleted");
+      notify();
+    } catch (error) {
+      console.log(error);
+      const notify = () => toast.error("✘ Error has occurred while deleting");
+      notify();
+    }
   };
   const navigate = useNavigate();
   //Modify
@@ -30,17 +36,17 @@ export default function Post({
         {/* head */}
         <thead>
           <tr>
-            <th>Title: {title}</th>
+            <th>{title}</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td> Content:{body}</td>
+            <td> {body}</td>
           </tr>
           {imgurl && (
             <tr>
               <td>
-                <img src={imgurl} alt="image" />
+                <img src={imgurl} alt="image" className="w-md" />
               </td>
             </tr>
           )}

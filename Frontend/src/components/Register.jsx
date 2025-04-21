@@ -2,13 +2,14 @@ import axios from "axios";
 import React, { useState } from "react";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router";
+import { ToastContainer, toast } from "react-toastify";
 export default function Register({ userhandler, userIdhandler }) {
   const [form, setform] = useState({
     username: "",
     password: "",
   });
   //check for filling mail and password
-  const [check, setcheck] = useState(true);
+  const [check, setcheck] = useState(false);
   const formhandler = (e) => {
     const newform = { ...form, [e.target.name]: e.target.value };
     setform(newform);
@@ -16,20 +17,32 @@ export default function Register({ userhandler, userIdhandler }) {
   const navigate = useNavigate();
   // sending data to DB and checking it
   const registerhandler = async (e) => {
-    e.preventDefault();
-    if (!form.password || !form.username) {
-      setcheck(true);
-    } else {
-      setcheck(false);
-      const { data } = await axios.post("http://localhost:8080/register", form);
-      Cookies.set("token", data[0]);
-      userhandler(data[1]);
-      userIdhandler(data[2]);
-      navigate("/");
+    try {
+      e.preventDefault();
+      if (!form.password || !form.username) {
+        setcheck(true);
+      } else {
+        setcheck(false);
+        const { data } = await axios.post(
+          "http://localhost:8080/register",
+          form
+        );
+        Cookies.set("token", data[0]);
+        userhandler(data[1]);
+        userIdhandler(data[2]);
+        navigate("/");
+      }
+    } catch (err) {
+      console.log(err);
+      const notify = () => toast("✘ Error has occurred while registering!");
+      notify();
+      const notify2 = () => toast.error("Try again later");
+      notify2();
     }
   };
   return (
     <>
+      <ToastContainer theme="dark" />
       <div className=" flex flex-col items-center justify-center">
         <div className="block relative w-full max-w-md top-50">
           <form>

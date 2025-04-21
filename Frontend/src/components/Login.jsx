@@ -2,9 +2,10 @@ import axios from "axios";
 import React, { useState } from "react";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router";
+import { ToastContainer, toast } from "react-toastify";
 export default function Login({ userhandler, userIdhandler }) {
   //check for mail and password data
-  const [check, setcheck] = useState(true);
+  const [check, setcheck] = useState(false);
   const [form, setform] = useState({
     username: "",
     password: "",
@@ -22,20 +23,29 @@ export default function Login({ userhandler, userIdhandler }) {
       setcheck(true);
       setwrongmail(false);
     } else {
-      setcheck(false);
-      const { data } = await axios.post("http://localhost:8080/login", form);
-      if (data !== "wrong") {
-        Cookies.set("token", data[0]);
-        userhandler(data[1]);
-        userIdhandler(data[2]);
-        navigate("/");
-      } else {
-        setwrongmail(true);
+      try {
+        setcheck(false);
+        const { data } = await axios.post("http://localhost:8080/login", form);
+        if (data !== "wrong") {
+          Cookies.set("token", data[0]);
+          userhandler(data[1]);
+          userIdhandler(data[2]);
+          navigate("/");
+        } else {
+          setwrongmail(true);
+        }
+      } catch (err) {
+        console.log(err);
+        const notify = () => toast("✘ Error has occurred while logging in");
+        notify();
+        const notify2 = () => toast.error("Try again later");
+        notify2();
       }
     }
   };
   return (
     <>
+      <ToastContainer theme="dark" />
       <div className=" flex flex-col items-center justify-center">
         <div className="block relative w-full max-w-md top-50">
           <form>

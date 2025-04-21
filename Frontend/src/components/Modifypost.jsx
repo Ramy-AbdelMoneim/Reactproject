@@ -31,19 +31,25 @@ export default function Modifypost({ posts, modifypost }) {
   const navigate = useNavigate();
   const modifyhandler = async (e) => {
     e.preventDefault();
-    const res = await Modifydb(form._id);
-    modifypost(res);
-    const notify = () => toast("✔ Post has been Modified");
-    notify();
+    await Modifydb(form._id);
     navigate("/");
   };
   //modify in db
   const Modifydb = async (id) => {
-    const { data } = await axios.post(
-      "http://localhost:8080/modify/" + id,
-      form
-    );
-    return data;
+    try {
+      const { data } = await axios.post(
+        "http://localhost:8080/modify/" + id,
+        form
+      );
+      modifypost(data);
+      const notify = () => toast("✔ Post has been Modified");
+      notify();
+    } catch (err) {
+      console.log(err);
+      const notify = () =>
+        toast.error("❌ Error has occured while Modifying Post");
+      notify();
+    }
   };
   return (
     <PostTable

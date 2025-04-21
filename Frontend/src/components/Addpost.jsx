@@ -21,16 +21,22 @@ export default function Addpost({ userId, addpost, user }) {
     e.preventDefault();
     let newform = { ...form, userId: userId, by: user };
     setform(newform);
-    const notify = () => toast("✔ Post has been added");
-    notify();
     addpostDB(newform);
   };
 
   //adding post to DB
   const addpostDB = async (DBform) => {
-    const res = await axios.post("http://localhost:8080/add", DBform);
-    addpost(res.data);
-    navigate("/");
+    try {
+      navigate("/");
+      const res = await axios.post("http://localhost:8080/add", DBform);
+      addpost(res.data);
+      const notify = () => toast("✔ Post has been added");
+      notify();
+    } catch (err) {
+      console.log(err);
+      const notify = () => toast.error("❌ Error has been occured");
+      notify();
+    }
   };
   return (
     <PostTable

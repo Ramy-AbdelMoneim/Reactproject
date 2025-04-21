@@ -44,8 +44,11 @@ export default function App() {
   }, []);
   //addpost
   const addpost = (post) => {
+    const oldposts = [...posts];
+    console.log("function: ", oldposts);
     const newposts = [...posts, post];
     setposts(newposts);
+    return oldposts;
   };
 
   //delete post
@@ -63,6 +66,7 @@ export default function App() {
     newposts[postIdx] = newpost;
     setposts(newposts);
   };
+
   //logout
   const logout = () => {
     setUser("");
